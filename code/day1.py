@@ -1,5 +1,8 @@
+#!/usr/bin/python3
+
+
 def count_single_increases():
-    """AoC2021 -- Day1: Part1"""
+    """--- Day 1: Sonar Sweep ---"""
     file_path = "input/day1.txt"
     line_counter, increase_counter = 0, 0
     with open(file_path, "r") as f:
