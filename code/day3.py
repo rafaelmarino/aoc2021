@@ -38,11 +38,53 @@ def numpy_power_consumption(data):
     return power_consumption
 
 
+def life_support(data):
+    """--- Part Two ---"""
+    # data = [
+    #     "00100",
+    #     "11110",
+    #     "10110",
+    #     "10111",
+    #     "10101",
+    #     "01111",
+    #     "00111",
+    #     "11100",
+    #     "10000",
+    #     "11001",
+    #     "00010",
+    #     "01010",
+    # ]
+    o2gr = data  # oxygen generator rating
+    co2sr = data  # carbon dioxide scrubber rating
+    bit_tracker = 0
+    while len(o2gr) > 1:
+        o2gr2d_ = [list(map(int, row)) for row in o2gr]
+        true_bit_count = sum(list(zip(*o2gr2d_))[bit_tracker])
+        # most common bit
+        mcb = "1" if true_bit_count >= len(o2gr) / 2 else "0"
+        o2gr = [num for num in o2gr if num[bit_tracker] == mcb]
+        bit_tracker += 1
+        bit_tracker %= 12
+    bit_tracker = 0
+    while len(co2sr) > 1:
+        co2sr2d_ = [list(map(int, row)) for row in co2sr]
+        true_bit_count = sum(list(zip(*co2sr2d_))[bit_tracker])
+        # least common bit
+        lcb = "0" if true_bit_count >= len(co2sr) / 2 else "1"
+        co2sr = [num for num in co2sr if num[bit_tracker] == lcb]
+        bit_tracker += 1
+        bit_tracker %= 12
+    life_support_rating = int(o2gr[0], 2) * int(co2sr[0], 2)
+    return life_support_rating
+
+
 if __name__ == "__main__":
     file_path = "input/day3.txt"
     with open(file_path, "r") as f:
         data = f.read().splitlines()
     pc = compute_power_consumption(data)
     pc_n = numpy_power_consumption(data)
+    ls = life_support(data)
     print(f"Power consumption = (gamma_r x epsilon_r)--python3: {pc}")
     print(f"Power consumption = (gamma_r x epsilon_r)--numpy: {pc_n}")
+    print(f"Life-support rating = (o2gen x co2scrubb): {ls}")
