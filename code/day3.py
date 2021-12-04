@@ -40,20 +40,6 @@ def numpy_power_consumption(data):
 
 def life_support(data):
     """--- Part Two ---"""
-    # data = [
-    #     "00100",
-    #     "11110",
-    #     "10110",
-    #     "10111",
-    #     "10101",
-    #     "01111",
-    #     "00111",
-    #     "11100",
-    #     "10000",
-    #     "11001",
-    #     "00010",
-    #     "01010",
-    # ]
     o2gr = data  # oxygen generator rating
     co2sr = data  # carbon dioxide scrubber rating
     bit_tracker = 0
@@ -82,6 +68,20 @@ if __name__ == "__main__":
     file_path = "input/day3.txt"
     with open(file_path, "r") as f:
         data = f.read().splitlines()
+    # data = [
+    #     "00100",
+    #     "11110",
+    #     "10110",
+    #     "10111",
+    #     "10101",
+    #     "01111",
+    #     "00111",
+    #     "11100",
+    #     "10000",
+    #     "11001",
+    #     "00010",
+    #     "01010",
+    # ]
     pc = compute_power_consumption(data)
     pc_n = numpy_power_consumption(data)
     ls = life_support(data)
