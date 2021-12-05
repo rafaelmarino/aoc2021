@@ -41,24 +41,32 @@ def play_bingo(data):
     # len(boards_)  # 100
     # assert sum([len(set(b)) for b in boards__]) == 5 * 5 * 100
     board_marks = {i: [[0] * 5 for _ in range(5)] for i in range(len(boards_))}
+    winning_boards = []
+    board_ids = []  # ids of winning boards; after winning exclude board
     for draw in draws:
         for i, board in enumerate(boards__):
-            if draw in board:
+            if draw in board and i not in board_ids:
                 # print(draw in board, draw, i, board)
                 array_pos = board.index(draw)
                 row_id, col_id = array_pos // dim[0], array_pos % dim[1]
                 board_marks[i][row_id][col_id] = 1
                 bingo = check_bingo(board_marks[i])
-                if bingo:
+                if bingo:  # if the current (draw, board) win bingo
+                    winning_boards.append([draw, boards__[i], board_marks[i]])
+                    board_ids.append(i)
                     # print(draw, i, bingo, board_marks[i])  # board_marks[i]
-                    return compute_score(draw, boards__[i], board_marks[i])
-        # print(draw)
-        # break  # apply all markings for a single draw
+                    # return compute_score(draw, boards__[i], board_marks[i])
+    return winning_boards
+    # print(draw)
+    # break  # apply all markings for a single draw
 
 
 if __name__ == "__main__":
     file_path = "input/day4.txt"
     with open(file_path, "r") as f:
         data = f.read().splitlines()
-        winning_score = play_bingo(data)
-        print(f"Winning score from first-winning bingo board: {winning_score}")
+    winning_boards = play_bingo(data)
+    first_win_score = compute_score(*winning_boards[0])
+    second_win_score = compute_score(*winning_boards[-1])
+    print(f"Winning score from first-winning bingo board: {first_win_score}")
+    print(f"Winning score from first-winning bingo board: {second_win_score}")
