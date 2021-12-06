@@ -2,7 +2,7 @@
 
 
 if __name__ == "__main__":
-    with open("input/day5-test.txt", "r") as f:
+    with open("input/day5.txt", "r") as f:
         data = f.read().splitlines()
     coordinates = []
     for line in data:
@@ -15,18 +15,29 @@ if __name__ == "__main__":
     # grid = [[0] * dim_length] * dim_length
     grid = [[0] * dim_length for i in range(0, dim_length)]
     for coords in coordinates:
-        coords = coordinates[2]
+        # coords = coordinates[2]
         print(coords)
         x1, y1, x2, y2 = coords[0], coords[1], coords[2], coords[3]
         vertical = True if x1 - x2 == 0 else False
         horizontal = True if y1 - y2 == 0 else False
         if vertical:  # implies constant x == iteration through rows
-            for step in range(y2 - y1 + 1):
-                grid[y1 + step][x1] += 1
+            segment = y2 - y1
+            for step in range(abs(segment) + 1):
+                if segment > 0:
+                    grid[y1 + step][x1] += 1
+                else:
+                    grid[y1 - step][x1] += 1
         if horizontal:  # implies constant y == iteration through row's cols
-            for step in range(x2 - x1 + 1):
-                grid[y1][x1 + step] += 1
-    grid
+            segment = x2 - x1
+            for step in range(abs(segment) + 1):
+                if segment > 0:
+                    grid[y1][x1 + step] += 1
+                else:
+                    grid[y1][x1 - step] += 1
+    # grid
+    dangerous_mask = [1 if count >= 2 else 0 for row in grid for count in row]
+    sum(dangerous_mask)  # points with 2 or more "stacked" hydrothermal vents
+    # return sum(dangerous_mask)
 
 with open("extras/day5-extras.txt", "w") as f:
     for row in grid:
