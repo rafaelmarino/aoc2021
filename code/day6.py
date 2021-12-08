@@ -7,7 +7,7 @@ def simulate_lanternfish_school(school, days):
         old_school_size = len(school)
         for i, fish_timer in enumerate(school):
             if i + 1 > old_school_size:
-                continue  # new spawns start counting the day after
+                continue  # new spawns start countdown the day after
             if fish_timer - 1 == -1:
                 school[i] = 6
                 school.append(8)  # new spawn
