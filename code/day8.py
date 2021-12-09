@@ -41,7 +41,6 @@ def signal2display_hash(signals):
             signal2display[tmp_list[0]] = "f"  # 'g': 'ff'
         else:
             three = signal
-
     for signal in zero_six_nine:
         tmp = list(set(eight) - set(signal))[0]
         if tmp == dddd:
@@ -51,10 +50,10 @@ def signal2display_hash(signals):
     for signal in six_or_nine:
         tmp_list = list(set(one) - set(signal))
         if tmp_list:
-            six = signal
+            # six = signal
             signal2display[tmp_list[0]] = "c"  # 'c': 'cc'
-        else:
-            nine = signal
+        # else:
+        #     nine = signal
     # solved: one, two, three, four, five, seven, eight, zero, nine
     tmp = list(set(two) - set(five) - set(seven))[0]
     signal2display[tmp] = "e"  # 'a': 'ee'
@@ -65,8 +64,7 @@ def signal2display_hash(signals):
 
 def count_easy_digits(signal2display, display, proper_display):
     """--- Day 8: Seven Segment Search --- Part 1"""
-    easy_digits = ["one", "four", "seven", "eight"]
-    easy_digit_codes = [proper_display[n] for n in easy_digits]
+    easy_digit_codes = [proper_display[n] for n in [1, 4, 7, 8]]
     easy_digits_count = 0
     for digit in display:
         decoded_digit = set([signal2display[i] for i in digit])
@@ -92,18 +90,6 @@ if __name__ == "__main__":
         data = f.read().splitlines()
         # data = f.readline()
     proper_display = {
-        "zero": set("abcefg"),
-        "one": set("cf"),
-        "two": set("acdeg"),
-        "three": set("acdfg"),
-        "four": set("bcdf"),
-        "five": set("abdfg"),
-        "six": set("abdefg"),
-        "seven": set("acf"),
-        "eight": set("abcdefg"),
-        "nine": set("abcdfg"),
-    }
-    proper_display2 = {
         0: set("abcefg"),
         1: set("cf"),
         2: set("acdeg"),
@@ -123,9 +109,9 @@ if __name__ == "__main__":
         signal2display = signal2display_hash(signals)
         ted += count_easy_digits(signal2display, display, proper_display)
         # break
-        sum_ += get_proper_display(signal2display, display, proper_display2)
-    print(f"Part1 -- Total easy digits decoded in the display: {ted}")
-    print(f"Part2 -- Total easy digits decoded in the display: {sum_}")
+        sum_ += get_proper_display(signal2display, display, proper_display)
+    print(f"Part1 -- Count of decoded easy digits in the display: {ted}")
+    print(f"Part2 -- Sum of all decoded digits in the display: {sum_}")
 
 # easy_digits = {2: 'one', 3: 'seven', 4: 'four',  7: 'eight'}
 # hard_digits = {5: ['two', 'three', 'five'] , 6: ['zero', 'six', 'nine']}
