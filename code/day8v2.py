@@ -28,7 +28,7 @@ def rewire_display(signals, display):
         if len(d) == 6:  # [0, 6, 9]
             if len(list(set(one) - set(d))) == 1:
                 rewired_display.append(6)
-            elif len(list(set(d) - set(one))) == 4:
+            elif len(list(set(d) - set(four))) == 2:
                 rewired_display.append(9)
             else:
                 rewired_display.append(0)
@@ -36,7 +36,7 @@ def rewire_display(signals, display):
 
 
 if __name__ == "__main__":
-    with open("test-input/day8.txt", "r") as f:
+    with open("input/day8.txt", "r") as f:
         data = f.read().splitlines()
         # data = f.readline()
     ted, sum_ = 0, 0
