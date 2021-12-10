@@ -15,33 +15,38 @@ def extract_low_points(matrix):
     return low_points
 
 
-def compute_three_largest_basins():
+def traverse_sccs(grid):
     """--- Part Two ---"""
-    return
+
+    def dfs(grid, i, j):
+        out_of_bounds_i = i < 0 or i >= len(grid)
+        out_of_bounds_j = j < 0 or j >= len(grid[0])
+        if out_of_bounds_i or out_of_bounds_j or grid[i][j] == 9:
+            return
+        grid[i][j] = 9  # mark as visited
+        dfs(grid, i + 1, j)
+        dfs(grid, i - 1, j)
+        dfs(grid, i, j + 1)
+        dfs(grid, i, j - 1)
+
+    nines_ = (grid == 9).sum()
+    scc_count = 0  # count of strongly connected components aka basins
+    ncs = []  # node counts per SCC
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] != 9:  # if node not visited
+                dfs(grid, i, j)
+                scc_count += 1
+                # just visited = all visited - initial nodes - prev visited
+                ncs.append((grid == 9).sum() - nines_ - sum(ncs))
+    return ncs
 
 
 if __name__ == "__main__":
-    matrix = np.genfromtxt("test-input/day9.txt", delimiter=1, dtype=int)
+    matrix = np.genfromtxt("input/day9.txt", delimiter=1, dtype=int)
     low_points = extract_low_points(matrix)
     risk = (low_points + 1).sum()
-
-    count = 0
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            if grid[i][j] == "1":
-                self.dfs(grid, i, j)
-                count += 1
-    return count
-
-
-def dfs(self, grid, i, j):
-    if i < 0 or j < 0 or i >= len(grid) or j >= len(grid[0]) or grid[i][j] != "1":
-        return
-    grid[i][j] = "#"
-    self.dfs(grid, i + 1, j)
-    self.dfs(grid, i - 1, j)
-    self.dfs(grid, i, j + 1)
-    self.dfs(grid, i, j - 1)
-
+    scc_node_counts = sorted(traverse_sccs(matrix[:]), reverse=True)
+    top3_areas = np.prod(scc_node_counts[:3])
     print(f"Part 1 -- Total risk from all low points: {risk}")
-    # print(f"{}")
+    print(f"Part 2 -- Area of top 3 SCCs (basins) {top3_areas}")
