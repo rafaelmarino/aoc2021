@@ -12,8 +12,6 @@ if __name__ == "__main__":
     adj_list = defaultdict(list)
     for u, v in [uv.strip().split("-") for uv in data]:
         adj_list[u].append(v)
-        if u == "start" or v == "end":
-            continue
         adj_list[v].append(u)
 
     def traverse(can_twice, a="start", seen={"start"}):
