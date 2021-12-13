@@ -9,17 +9,18 @@ if __name__ == "__main__":
     with open(actual, "r") as f:
         data = f.read().splitlines()
 
-    d = defaultdict(list)
+    adj_list = defaultdict(list)
     for u, v in [uv.strip().split("-") for uv in data]:
-        d[u].append(v)
-        d[v].append(u)
+        adj_list[u].append(v)
+        if u == "start" or v == "end":
+            continue
+        adj_list[v].append(u)
     # d.default_factory = None  # return to regular dic
-    d
 
-    def dfs(visited_caves=set(), start="start", end="end"):
+    def dfs(visited_caves=set(), start="start", end="end", canTwice=False):
         """--- Day 12: Passage Pathing ---"""
         counter = 0
-        for node in d[start]:
+        for node in adj_list[start]:
             if node == "start":
                 continue
             if start.islower():
@@ -27,10 +28,12 @@ if __name__ == "__main__":
             if node == end:  # path found
                 counter += 1
             elif node in visited_caves:
-                continue
+                if canTwice:
+                    counter += dfs(visited_caves, node, end, canTwice=False)
             else:
-                counter += dfs(visited_caves, start=node)
+                counter += dfs(visited_caves, node, end, canTwice)
         return counter
 
-    print(f"Part 1 -- {dfs()}")
-    # print(f"Part 2 -- {}")
+
+print(f"Part 1 -- {dfs()}")
+print(f"Part 2 -- {dfs(canTwice=True)}")
