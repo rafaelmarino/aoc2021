@@ -1,12 +1,25 @@
 #!/usr/bin/python3
 
+from collections import Counter
 
-from collections import defaultdict
+
+def insertion(pairs, chars):
+    p = Counter()
+    for (a, b), times in pairs.items():
+        e = rules[a + b]  # single element to insert
+        p[a + e] += times
+        p[e + b] += times
+        chars[e] += times
+    return p
 
 
-def f1():
+def solve(poly, steps):
     """--- Day 14: Extended Polymerization ---"""
-    pass
+    pairs = Counter(a + b for a, b in zip(poly, poly[1:]))  # defaults to 1
+    chars = Counter(poly)
+    for _ in range(steps):
+        pairs = insertion(pairs, chars)
+    return max(chars.values()) - min(chars.values())
 
 
 if __name__ == "__main__":
@@ -14,29 +27,8 @@ if __name__ == "__main__":
     with open(actual, "r") as f:
         data = f.read().splitlines()
 
-    temp, rules = data[0], data[2:]
-    rules_d = {}
-    for rule in rules:
-        left, right = rule.split(" -> ")
-        rules_d[left] = left[0] + right + left[1]
+    poly, _, *rules = data
+    rules = dict(r.split(" -> ") for r in rules)
 
-    steps = 10
-    for step in range(steps):
-        overlaps = [(E + temp[i + 1]) for i, E in enumerate(temp[:-1])]
-        for i, overlap in enumerate(overlaps):
-            overlaps[i] = rules_d[overlap]
-        temp = "".join([o[:-1] for o in overlaps]) + overlaps[-1][-1]
-    # len(temp)
-
-    counts = defaultdict(int)
-    for E in temp:
-        counts[E] += 1
-
-    max_E = max(counts.keys(), key=counts.get)
-    min_E = min(counts.keys(), key=counts.get)
-
-    diff = counts[max_E] - counts[min_E]
-    diff
-
-    # print(f"Part 1 -- Dots after the first fold in the paper: {p1}")
-    # print(f"Part 2 -- Dots after all the folds: {len(folded_paper)}")
+print(f"Part 1 -- {solve(poly, 10)}")
+print(f"Part 2 -- {solve(poly, 40)}")
