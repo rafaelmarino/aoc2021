@@ -1,2 +1,4 @@
 # ignore these folders
 /venv
+code/__pycache__/utils.cpython-38.pyc
+.gitignore
