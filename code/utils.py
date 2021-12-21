@@ -4,6 +4,9 @@ from itertools import chain
 cat = "".join
 flatten = chain.from_iterable
 
+# import timeit
+# print(timeit.timeit(main, number=1))
+
 
 def grid_to_dict(grid):
     return {(i, j): v for j, row in enumerate(grid) for i, v in enumerate(row)}
