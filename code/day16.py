@@ -26,7 +26,7 @@ def compute_spv(tid, bits, spv):
 def parse(bits):
     """--- Day 16: Packet Decoder ---"""
     global sumofversions
-    version, bits = int(bits[:3], 2), bits[3:]  # read & discard
+    version, bits = int(bits[:3], 2), bits[3:]  # read & cut off bits
     sumofversions += version
     tid, bits = int(bits[:3], 2), bits[3:]
     if tid == 4:  # literal value packet
@@ -40,20 +40,20 @@ def parse(bits):
         return (bits, int(value, 2))
     else:  # operator packet, contains 1 or more subpackets
         ltid, bits = bits[0], bits[1:]  # length type id
-        spv = []  # subpacket_values
+        spvs = []  # subpacket_values
         if ltid == "0":
             subpackets_len, bits = int(bits[:15], 2), bits[15:]
             subpackets = bits[:subpackets_len]
             bits = bits[subpackets_len:]
             while subpackets:
                 subpackets, sub_value = parse(subpackets)
-                spv.append(sub_value)
+                spvs.append(sub_value)
         elif ltid == "1":
             subpackets_count, bits = int(bits[:11], 2), bits[11:]
             for _ in range(subpackets_count):
                 bits, sub_value = parse(bits)
-                spv.append(sub_value)
-        return compute_spv(tid, bits, spv)
+                spvs.append(sub_value)
+        return compute_spv(tid, bits, spvs)
 
 
 if __name__ == "__main__":
