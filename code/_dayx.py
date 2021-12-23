@@ -1,20 +1,12 @@
 #!/usr/bin/python3
 
 
-def p1():
-    """--- Day x: ---"""
-    return
-
-
-def p2():
-    """--- Part Two ---"""
-    return
-
+from utils import read_input, integers
 
 if __name__ == "__main__":
-    with open("test-input/dayx.txt", "r") as f:
-        data = f.read().splitlines()
-        # data = f.readline()
-    p1()
-    print(f"{}")
-    print(f"{}")
+    T = 0
+    test, actual = "test/dayX", "input/dayX"
+    hex_ = read_input(test) if T else read_input(actual)
+
+print(f"{}")
+print(f"{}")
