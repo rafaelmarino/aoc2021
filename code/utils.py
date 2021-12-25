@@ -24,6 +24,13 @@ def neighbours(i, j, diag=False):
         yield (i + 1, j + 1)
 
 
+def neighbours9(i, j):
+    """Return 3x3 neighbors starting from top left corner, clockwise."""
+    yield from [(i - 1, j - 1), (i - 1, j), (i - 1, j + 1)]  # above
+    yield from [(i, j - 1), (i, j), (i, j + 1)]  # level
+    yield from [(i + 1, j - 1), (i + 1, j), (i + 1, j + 1)]  # below
+
+
 # def neighbours(i, j, diag=False):
 #     yield from [(i-1, j), (i+1, j), (i, j-1), (i, j+1)]
 #     if diag:
