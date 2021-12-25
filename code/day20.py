@@ -7,7 +7,7 @@ import numpy as np
 def enhance_image(algo, img, t=2):
     """--- Day 20: Trench Map ---"""
     switch = False
-    for i in range(t):
+    for _ in range(t):
         s = "." if not switch else "#"  # sentinel value
         img = np.pad(img, pad_width=(1), mode="constant", constant_values=s)
         output_img = []
@@ -15,14 +15,15 @@ def enhance_image(algo, img, t=2):
             for j in range(len(row)):
                 value = ""
                 for (ni, nj) in neighbours9(i, j):
-                    if ni <= -1 or ni >= len(img) or nj <= -1 or nj >= len(img):
+                    img_sz = len(img)
+                    if ni <= -1 or ni >= img_sz or nj <= -1 or nj >= img_sz:
                         value += s
                     else:
                         value += img[ni][nj]
                 value = value.replace("#", "1").replace(".", "0")
                 algo_value = algo[int(value, 2)]
                 output_img.append(algo_value)
-        img = chunks(output_img, len(img))
+        img = chunks(output_img, img_sz)
         switch = not switch
     # return output_img  # actual enhanced image
     return sum(x == "#" for row in output_img for x in row)
