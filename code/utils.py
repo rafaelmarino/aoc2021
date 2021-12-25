@@ -64,3 +64,22 @@ def digits(line):
 
 def integers(text, negative=True):
     return mapt(int, re.findall(r"-?\d+" if negative else r"\d+", text))
+
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    result = []
+    for i in range(0, len(lst), n):
+        result.append(lst[i : i + n])
+        # yield lst[i : i + n]
+    return result
+
+
+def write_txt(data, path):
+    """Write eight capital letters to text"""
+    with open(path, "w") as f:
+        for row in data:
+            row = "".join(map(str, row))
+            # row = row.replace("0", " ")
+            # row = row.replace("1", "#")
+            _ = f.write(row + "\n")
