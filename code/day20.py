@@ -10,12 +10,12 @@ def enhance_image(algo, img, t=2):
     for _ in range(t):
         s = "." if not switch else "#"  # sentinel value
         img = np.pad(img, pad_width=(1), mode="constant", constant_values=s)
+        img_sz = len(img)
         output_img = []
         for i, row in enumerate(img):
             for j in range(len(row)):
                 value = ""
                 for (ni, nj) in neighbours9(i, j):
-                    img_sz = len(img)
                     if ni <= -1 or ni >= img_sz or nj <= -1 or nj >= img_sz:
                         value += s
                     else:
