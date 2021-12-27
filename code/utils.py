@@ -73,8 +73,8 @@ def integers(text, negative=True):
     return mapt(int, re.findall(r"-?\d+" if negative else r"\d+", text))
 
 
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
+def n_chunks(lst, n):
+    """Return/yield successive n-sized chunks from lst."""
     result = []
     for i in range(0, len(lst), n):
         result.append(lst[i : i + n])
