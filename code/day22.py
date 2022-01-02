@@ -10,21 +10,20 @@ from math import prod
 
 def initialize_reactor(steps):
     """--- Day 22: Reactor Reboot ---"""
-    coords = set()
-    for step in steps:
-        on = True if step[0] == "on" else False
-        x1, x2, y1, y2, z1, z2 = step[1]
-        new_coords = {  # inclusive range. truncate from -50 to 50
+    cubes = set()
+    for switch, step in steps:
+        x1, x2, y1, y2, z1, z2 = step
+        new_cuboid = {  # inclusive range. truncate from -50 to 50
             (x, y, z)
             for x in range(max(x1, -50), min(x2, 50) + 1)
             for y in range(max(y1, -50), min(y2, 50) + 1)
             for z in range(max(z1, -50), min(z2, 50) + 1)
         }
-        if on:
-            coords |= new_coords
+        if switch == "on":
+            cubes |= new_cuboid  # set union
         else:
-            coords -= new_coords
-    return len(coords)
+            cubes -= new_cuboid  # set removal
+    return len(cubes)
 
 
 class Cuboid:
@@ -77,14 +76,7 @@ class Cuboid:
         return ret
 
 
-if __name__ == "__main__":
-    T = 0
-    test, actual = "test/day22", "input/day22"
-    data = read_input(test) if T else read_input(actual)
-    steps = [(row.split(" ")[0], integers(row)) for row in data]
-
-
-def compute(steps: list) -> int:
+def reboot_reactor(steps: list) -> int:
     cubes: list[Cuboid] = []
     for on, step in steps:
         step = [num + 1 if i % 2 == 1 else num for i, num in enumerate(step)]
@@ -96,7 +88,16 @@ def compute(steps: list) -> int:
     return sum(cube.vol() for cube in cubes)
 
 
-print(compute(steps))
+if __name__ == "__main__":
+    T = 0
+    test, actual = "test/day22", "input/day22"
+    data = read_input(test) if T else read_input(actual)
+    steps = [(row.split(" ")[0], integers(row)) for row in data]
+
+
+print(f"Part 1 -- On cubes after initialization: {initialize_reactor(steps)}")
+print(f"Part 2 -- On cubes after full reboot: {reboot_reactor(steps)}")
+
 
 # # volume = 0
 # on, coords_a = steps[0]
@@ -154,25 +155,21 @@ print(compute(steps))
 #     pass
 
 
-# print(f"Part 1 -- On cubes after initialization: {initialize_reactor(steps)}")
-# print(f"Part 2 -- On cubes after full reboot: {reboot_reactor(steps)}")
-
+"""
+Try recursion. When the command is 'on' the resulting number of cubes is all the cubes that were already on, plus all the cubes in the region being turned on, minus all the cubes that were already on in that region (so that they aren't double-counted)
+"""
 
 """
-rebooted_cuboids = []
-for step in steps:
-    cuboid_b = Cuboid(step)
-    processed_cuboids = []
-    for cuboid_a in rebooted_cuboids:
-        # Cases for cuboid_a - cuboid_b:
-        - If cuboid_b contains cuboid_a:
-            continue
-        - Elif cuboid_a intersects cuboid_b:
-            cuboid_a = Subtract(cuboid_b from cuboid_a)
-            processed_cuboids.append(cuboid_a)
-    if cuboid_b.on:
-        processed_cuboids.append(cuboid_b)
-    rebooted_cuboids = processed_cuboids
-
-Try recursion. When the command is 'on' the resulting number of cubes is all the cubes that were already on, plus all the cubes in the region being turned on, minus all the cubes that were already on in that region (so that they aren't double-counted
+def reboot_reactor(reboot_steps):
+    reactor = []
+    for step in reboot_steps:
+        temp = []
+        for cuboid in reactor:
+            I = intersection(cuboid, step.cuboid)
+            minikubes = subtract(cuboid - I)
+            temp.append(minikubes)
+        reactor = temp
+        if step.switch is on:
+            reactor.append(step.cuboid)
+    return sum(cuboid.volume() for cuboid in reactor)
 """
