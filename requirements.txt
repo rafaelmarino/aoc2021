@@ -1,5 +1,5 @@
 black==21.11b1
-certifi==2021.10.8
+certifi==2023.7.22
 charset-normalizer==2.0.8
 click==8.0.3
 flake8==4.0.1
